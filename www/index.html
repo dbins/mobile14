@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/jquerymobile.css" />
+    <script src="js/jquery-1.10.2.min.js"></script>
+	<script src="js/jquery.mobile.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	<script src="js/scripts.js"></script>
+	
+</head>
+   <body> 
+        <div data-role="page">
+
+        <div data-role="header">
+        <h1>Interior na Web</h1>
+        </div><!-- /header -->
+
+        <div data-role="content">   
+            
+            <div class="tab-content">
+                <div class="tab1" align="center">
+                    <p><strong>Aplicativo do portal INTERIOR NA WEB</strong></p>
+					<p>&nbsp;</p>
+					<p><img src="img/interior.png"></p>
+                </div>
+                <div class="tab2 ui-screen-hidden" id="anunciantes">
+                     <h1>Anunciantes</h1>
+					 <form class="ui-filterable">
+					  <input id="myFilter" data-type="search">
+					</form>
+					<ul id="listview" data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+					</ul>
+				
+                </div>
+				
+				
+				
+                <div class="tab3 ui-screen-hidden">
+                    <h1>Ver Mapa</h1>
+					<div id="map" style="width: 400px; height: 400px;"></div>
+                </div>
+                <div class="tab4 ui-screen-hidden">
+                    <h1>Onde Estou?</h1>
+					<div id="map_canvas" style="width: 400px; height: 400px;"></div>
+                </div>
+				
+				<div class="tab5 ui-screen-hidden">
+					<p><a href="#" id="voltar">Voltar</a></p>
+					<h1>Dados do Anunciante</h1>
+					<div id="dados_anunciante"></div>
+				</div>
+            </div>
+        </div><!-- /content -->
+		<div data-role="footer">
+        <div data-role="navbar" id="navbar">
+                <ul>
+                    <li><a href="#" class="ui-btn-active" data-icon="home" data-tab-class="tab1">Home</a></li>
+                    <li><a href="#" data-tab-class="tab2" data-icon="shop">Anunciantes</a></li>
+                    <li><a href="#" data-tab-class="tab3" data-icon="star">Ver Mapa</a></li>
+                    <li><a href="#" data-tab-class="tab4" data-icon="info">Onde Estou?</a></li>
+                </ul>
+            </div>
+        </div><!-- /header -->
+        </div><!-- /page -->
+		<script type="text/javascript" src="phonegap.js"></script>
+    </body>
+</html>

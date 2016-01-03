@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/jquerymobile.css" />
+    <script src="js/jquery164.js"></script>
+	<script src="js/jquery.mobile.min.js"></script>
+		<script>
+        var prevSelection = "tab1";
+		var id_anuncio = 0;
+        $("#navbar ul li").live("click",function(){
+            var newSelection = $(this).children("a").attr("data-tab-class");
+            $("."+prevSelection).addClass("ui-screen-hidden");
+            $("."+newSelection).removeClass("ui-screen-hidden");
+            prevSelection = newSelection;
+        });
+		
+		$("#anunciantes ul li").live("click",function(){
+		    var newSelection = "tab5";
+			id_anuncio = $(this).attr('id');
+			//Retornando os dados do anuncio selecionado
+			$.ajax({
+			type: "GET",
+			url: "http://www.interiornaweb.com.br/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
+			dataType: "xml",
+			success: function(data) {
+				var output = "";	
+				$(data).find('marker').each(function(){
+					
+					var codigo = $(this).find("codigo").text();
+					var nome = $(this).find("nome").text();
+					var endereco = $(this).find("endereco").text();
+					var ddd = $(this).find("ddd").text();
+					var telefone = $(this).find("telefone").text();
+					var cidade = $(this).find("cidade").text();
+					var estado = $(this).find("estado").text();
+					output += '<p><strong>' + nome + '</strong></p>';
+					output += '<p>' + endereco + '</p>';
+					output += '<p>' + ddd + ' - ' + telefone + '</p>';
+					output += '<p>' + cidade + ' - ' + estado + '</p>';
+				});
+				$("#dados_anunciante").html(output);
+				}
+			});
+			
+            $("."+prevSelection).addClass("ui-screen-hidden");
+            $("."+newSelection).removeClass("ui-screen-hidden");
+            prevSelection = newSelection;
+        });
+		
+		$("#voltar").live("click",function(){
+		    var newSelection = "tab2";
+			id_anuncio = 0;
+			$("#dados_anunciante").html("");
+            $("."+prevSelection).addClass("ui-screen-hidden");
+            $("."+newSelection).removeClass("ui-screen-hidden");
+            prevSelection = newSelection;
+        });
+		
+		var fileref=document.createElement('script');
+		fileref.setAttribute("type","text/javascript");
+		fileref.setAttribute("src",	"http://maps.googleapis.com/maps/api/js?callback=" + "getGeolocation");
+		document.getElementsByTagName("head")[0].appendChild(fileref);
+		
+		//Funcoes para exibir o mapa da posicao atual
+		function getGeolocation() {
+			// get the user's gps coordinates and display map
+			var options = {
+			maximumAge: 3000,
+			timeout: 5000,
+			enableHighAccuracy: true
+			};
+			navigator.geolocation.getCurrentPosition(loadMap, geoError, options);
+		}
+		
+		function loadMap(position) {
+			var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			var myOptions = {
+			zoom: 16,
+			center: latlng,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+			var mapObj = document.getElementById("map_canvas");
+			var map = new google.maps.Map(mapObj, myOptions);
+			var marker = new google.maps.Marker({
+			position: latlng,
+			map: map,
+			title:"You"
+			});
+		}
+		
+		function geoError(error) {
+			alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
+		}
+		
+		//Puxando o mapa dos anunciantes
+		var gmarkers = []; 
+		
+		var customIcons = {
+		  restaurant: {
+			icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
+			shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
+		  },
+		  bar: {
+			icon: 'http://labs.google.com/ridefinder/images/mm_20_red.png',
+			shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
+		  }
+		};
+
+		function load() {
+		  var latitude = "-23.195864";
+		  var longitude = "-49.384892";
+		  var myLatlng = new google.maps.LatLng(latitude, longitude);
+		  var mapOptions = {
+			center: myLatlng,
+			zoom: 15,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			mapTypeControl: true,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+				position: google.maps.ControlPosition.BOTTOM_CENTER
+			},
+			panControl: true,
+			panControlOptions: {
+				position: google.maps.ControlPosition.TOP_RIGHT
+			},
+			zoomControl: true,
+			zoomControlOptions: {
+				style: google.maps.ZoomControlStyle.LARGE,
+				position: google.maps.ControlPosition.LEFT_CENTER
+			},
+			scaleControl: true,
+			scaleControlOptions: {
+				position: google.maps.ControlPosition.TOP_LEFT
+			},
+			streetViewControl: true,
+			streetViewControlOptions: {
+				position: google.maps.ControlPosition.LEFT_TOP
+			}
+		  };
+		  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+		  var infoWindow = new google.maps.InfoWindow;
+		  // Change this depending on the name of your PHP file
+		  downloadUrl("http://www.interiornaweb.com.br/xml_tipo1.php?cidade=PIRAJU", function(data) {
+			var xml = data.responseXML;
+			var markers = xml.documentElement.getElementsByTagName("marker");
+			for (var i = 0; i < markers.length; i++) {
+			  var codigo = 	markers[i].getAttribute("codigo");
+			  var name = markers[i].getAttribute("name");
+			  var address = markers[i].getAttribute("address");
+			  var type = markers[i].getAttribute("type");
+			  var point = new google.maps.LatLng(
+				  parseFloat(markers[i].getAttribute("lat")),
+				  parseFloat(markers[i].getAttribute("lng")));
+			  var html = "<b>" + name + "</b> <br/>" + address;
+			  
+			  //var icon = customIcons[type] || {};
+			  var marker = new google.maps.Marker({
+				map: map,
+				position: point,
+				icon: icon.icon,
+				//icon: 'icone_mapas/' + (parseInt(i) + 1) + '.png' 
+				//shadow: icon.shadow
+			  });
+			  bindInfoWindow(marker, map, infoWindow, html);
+			}
+		  });
+		}
+		
+		function bindInfoWindow(marker, map, infoWindow, html) {
+		  google.maps.event.addListener(marker, 'click', function() {
+			infoWindow.setContent(html);
+			infoWindow.open(map, marker);
+		  });
+		  gmarkers.push(marker);
+		}
+		
+		function myclick(i) {
+			google.maps.event.trigger(gmarkers[i], "click");
+		}
+
+
+		function downloadUrl(url, callback) {
+		  var request = window.ActiveXObject ?
+			  new ActiveXObject('Microsoft.XMLHTTP') :
+			  new XMLHttpRequest;
+
+		  request.onreadystatechange = function() {
+			if (request.readyState == 4) {
+			  request.onreadystatechange = doNothing;
+			  callback(request, request.status);
+			}
+		  };
+
+		  request.open('GET', url, true);
+		  request.send(null);
+		}
+
+		function doNothing() {}
+		
+		//load();
+		
+		
+		//Carregando Anunciantes
+		$.ajax({
+		type: "GET",
+		url: "http://www.interiornaweb.com.br/xml_anuncio.php",
+		dataType: "xml",
+		success: function(data) {
+			var output = "";	
+			$(data).find('marker').each(function(){
+				
+				var codigo = $(this).find("codigo").text();
+				var nome = $(this).find("nome").text();
+				var endereco = $(this).find("endereco").text();
+				var ddd = $(this).find("ddd").text();
+				var telefone = $(this).find("telefone").text();
+				var cidade = $(this).find("cidade").text();
+				var estado = $(this).find("estado").text();
+				output += '<li id="'+codigo+'"><a href="#">'+nome+'</a></li>';
+			});
+			$('#listview').append(output).listview('refresh');
+			}
+		});
+	</script>
+</head>
+   <body> 
+        <div data-role="page">
+
+        <div data-role="header">
+        <h1>Interior na Web</h1>
+        </div><!-- /header -->
+
+        <div data-role="content">   
+            
+            <div class="tab-content">
+                <div class="tab1">
+                    <p>Aplicativo do portal INTERIOR NA WEB</p>
+                </div>
+                <div class="tab2 ui-screen-hidden" id="anunciantes">
+                     <h1>Anunciantes</h1>
+					 <form class="ui-filterable">
+					  <input id="myFilter" data-type="search">
+					</form>
+					<ul id="listview" data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+					  <li id="0"><a href="#">Adele</a></li>
+					  <li id="1"><a href="#">Agnes</a></li>
+					  <li id="2"><a href="#">Albert</a></li>
+					  <li id="3"><a href="#">Billy</a></li>
+					  <li id="4"><a href="#">Bob</a></li>
+					  <li id="5"><a href="#">Calvin</a></li>
+					  <li id="6"><a href="#">Cameron</a></li>
+					  <li id="7"><a href="#">Chloe</a></li>
+					  <li id="8"><a href="#">Christina</a></li>
+					  <li id="9"><a href="#">Diana</a></li>
+					  <li id="10"><a href="#">Gabriel</a></li>
+					  <li id="11"><a href="#">Glen</a></li>
+					  <li id="12"><a href="#">Ralph</a></li>
+					  <li id="13"><a href="#">Valarie</a></li>
+					</ul>
+				
+                </div>
+				
+				
+				
+                <div class="tab3 ui-screen-hidden">
+                    <h1>Ver Mapa</h1>
+					<div id="map" style="float:left; width:75%"></div>
+                </div>
+                <div class="tab4 ui-screen-hidden">
+                    <h1>Onde Estou?</h1>
+					<div id="map_canvas" style="width: 400px; height: 400px;"></div>
+                </div>
+				
+				<div class="tab5 ui-screen-hidden">
+					<p><a href="#" id="voltar">Voltar</a></p>
+					<h1>Dados do Anunciante</h1>
+					<div id="dados_anunciante"></div>
+				</div>
+            </div>
+        </div><!-- /content -->
+		<div data-role="footer">
+        <div data-role="navbar" id="navbar">
+                <ul>
+                    <li><a href="#" class="ui-btn-active" data-icon="home" data-tab-class="tab1">Home</a></li>
+                    <li><a href="#" data-tab-class="tab2" data-icon="plus">Anunciantes</a></li>
+                    <li><a href="#" data-tab-class="tab3" data-icon="grid">Ver Mapa</a></li>
+                    <li><a href="#" data-tab-class="tab4" data-icon="info">Onde Estou?</a></li>
+                </ul>
+            </div>
+        </div><!-- /header -->
+        </div><!-- /page -->
+    </body>
+</html>
