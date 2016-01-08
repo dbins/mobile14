@@ -228,7 +228,14 @@ function ListaAnunciantes(){
 			var telefone = markers[i].getAttribute("telefone");
 			var cidade = markers[i].getAttribute("cidade");
 			var estado = markers[i].getAttribute("estado");
-			output += '<li id="' + codigo + '"><a href="#">' + nome + '</a></li>';
+			var imagem = markers[i].getAttribute("imagem");
+			var telefone_formatado = "";
+			if (ddd != ""){
+				if (telefone != ""){
+					telefone_formatado = "(" + ddd + ") " + telefone;
+				}
+			}
+			output += '<li id="' + codigo + '"><a href="#"><img src="img/painel/' + imagem + '" /><h3>' + nome + '</h3><p>' + telefone_formatado + '</p></a></li>';
 		};
 		$('#listview').append(output).listview('refresh');
 		$("#listview").listview("refresh");
