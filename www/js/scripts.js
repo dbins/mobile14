@@ -211,6 +211,9 @@ function doNothing() {}
 
 //Carregando Anunciantes
 function ListaAnunciantes(){
+	$("#listview").hide();
+	$("#myFilter").hide();
+	$("#loading").show();
 	$.ajax({
 	type: "GET",
 	url: "http://www.interiornaweb.com.br/xml_anuncio.php",
@@ -239,6 +242,9 @@ function ListaAnunciantes(){
 		};
 		$('#listview').append(output).listview('refresh');
 		$("#listview").listview("refresh");
+		$("#listview").show();
+		$("#myFilter").show();
+		$("#loading").hide();
 		}
 	});
 }		
