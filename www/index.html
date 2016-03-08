@@ -7,12 +7,20 @@
 	<script src="js/jquery.mobile.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 	<script src="js/scripts.js"></script>
-	
+	<style type="text/css">
+		html { height: 100% } 
+		body { height: 100%; margin: 0; }
+		.ui-footer {
+			position: absolute !important;
+			bottom: 0;
+			width: 100%;
+		}
+	</style>
 </head>
    <body> 
         <div data-role="page">
 
-        <div data-role="header">
+        <div data-role="header" data-position="fixed" data-fullscreen="true">
         <h1>Interior na Web</h1>
         </div><!-- /header -->
 
@@ -26,23 +34,25 @@
                 </div>
                 <div class="tab2 ui-screen-hidden" id="anunciantes">
                      <h1>Anunciantes</h1>
-					 <form class="ui-filterable">
+					<form class="ui-filterable">
 					  <input id="myFilter" data-type="search">
 					</form>
 					<ul id="listview" data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
 					</ul>
+					<div align="center">
 					<img src="img/loading_game.gif" id="loading" width="300">
+					</div>
                 </div>
 				
 				
 				
                 <div class="tab3 ui-screen-hidden">
                     <h1>Ver Mapa</h1>
-					<div id="map" style="width: 400px; height: 400px;"></div>
+					<div id="map" style="position:absolute; width:100%; height:100%;padding: 0;"></div>
                 </div>
                 <div class="tab4 ui-screen-hidden">
                     <h1>Onde Estou?</h1>
-					<div id="map_canvas" style="width: 400px; height: 400px;"></div>
+					<div id="map_canvas" style="position:absolute; width:100%; height:100%;padding: 0;"></div>
                 </div>
 				
 				<div class="tab5 ui-screen-hidden">
@@ -52,7 +62,7 @@
 				</div>
             </div>
         </div><!-- /content -->
-		<div data-role="footer">
+		<div data-role="footer" data-position="fixed" data-fullscreen="true">
         <div data-role="navbar" id="navbar">
                 <ul>
                     <li><a href="#" class="ui-btn-active" data-icon="home" data-tab-class="tab1">Home</a></li>

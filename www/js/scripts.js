@@ -47,7 +47,7 @@ $(document).on("click","#anunciantes ul li", function(){
 			var telefone = markers[i].getAttribute("telefone");
 			var cidade = markers[i].getAttribute("cidade");
 			var estado = markers[i].getAttribute("estado");
-			output += '<p><strong>' + nome + '</strong></p>';
+			output += '<p><strong>' + nome.toUpperCase() + '</strong></p>';
 			output += '<p>' + endereco + '</p>';
 			output += '<p>' + ddd + ' - ' + telefone + '</p>';
 			output += '<p>' + cidade + ' - ' + estado + '</p>';
@@ -169,7 +169,7 @@ function load_mapa_anunciantes() {
 	  var marker = new google.maps.Marker({
 		position: point,
 		map: map,
-		title:"You"
+		title:name
 		});
 	  
 	  bindInfoWindow(marker, map, infoWindow, html);
@@ -238,7 +238,7 @@ function ListaAnunciantes(){
 					telefone_formatado = "(" + ddd + ") " + telefone;
 				}
 			}
-			output += '<li id="' + codigo + '"><a href="#"><img src="img/painel/' + imagem + '" /><h3>' + nome + '</h3><p>' + telefone_formatado + '</p></a></li>';
+			output += '<li id="' + codigo + '"><a href="#"><img style="height:100%" src="img/painel/' + imagem + '" /><h3>' + nome + '</h3><p>' + telefone_formatado + '</p></a></li>';
 		};
 		$('#listview').append(output).listview('refresh');
 		$("#listview").listview("refresh");
