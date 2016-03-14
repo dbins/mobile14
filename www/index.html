@@ -15,7 +15,18 @@
 			bottom: 0;
 			width: 100%;
 		}
+		.ConteudoLista {
+		
+			overflow: auto;
+			-webkit-overflow-scrolling: touch;
+			max-height: 350px;
+		}
 	</style>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$(".ConteudoLista").css('max-height',$(window).height()-120);
+	});	
+	</script>
 </head>
    <body> 
         <div data-role="page">
@@ -37,8 +48,10 @@
 					<form class="ui-filterable">
 					  <input id="myFilter" data-type="search">
 					</form>
+					<div class="ConteudoLista">
 					<ul id="listview" data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
 					</ul>
+					</div>
 					<div align="center">
 					<img src="img/loading_game.gif" id="loading" width="300">
 					</div>
@@ -56,7 +69,6 @@
                 </div>
 				
 				<div class="tab5 ui-screen-hidden">
-					<p><a href="#" id="voltar">Voltar</a></p>
 					<h1>Dados do Anunciante</h1>
 					<div id="dados_anunciante"></div>
 				</div>

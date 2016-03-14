@@ -15,6 +15,42 @@ function PaginaAtual(pagina){
 	}
 }
 
+function RetornarDadosAnuncio(codigo_anuncio){
+	var newSelection = "tab5";
+	id_anuncio = codigo_anuncio;
+	
+	//Retornando os dados do anuncio selecionado
+	$.ajax({
+	type: "GET",
+	url: "http://www.interiornaweb.com.br/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
+	dataType: "xml",
+	success: function(data) {
+		var output = "";	
+		var markers = $(data).find('marker');
+		for (var i = 0; i < markers.length; i++) {
+			
+			var codigo = markers[i].getAttribute("codigo");
+			var nome = markers[i].getAttribute("nome");
+			var endereco = markers[i].getAttribute("endereco");
+			var ddd = markers[i].getAttribute("ddd");
+			var telefone = markers[i].getAttribute("telefone");
+			var cidade = markers[i].getAttribute("cidade");
+			var estado = markers[i].getAttribute("estado");
+			output += '<p><strong>' + nome.toUpperCase() + '</strong></p>';
+			output += '<p>' + endereco + '</p>';
+			output += '<p>' + ddd + ' - ' + telefone + '</p>';
+			output += '<p>' + cidade + ' - ' + estado + '</p>';
+			output += '<p><a href="#" id="voltar2">Voltar</a></p>';
+		};
+		$("#dados_anunciante").html(output);
+		}
+	});
+	
+	$("."+prevSelection).addClass("ui-screen-hidden");
+	$("."+newSelection).removeClass("ui-screen-hidden");
+	prevSelection = newSelection;
+}
+
 //Navegacao
 var prevSelection = "tab1";
 var id_anuncio = 0;
@@ -51,6 +87,7 @@ $(document).on("click","#anunciantes ul li", function(){
 			output += '<p>' + endereco + '</p>';
 			output += '<p>' + ddd + ' - ' + telefone + '</p>';
 			output += '<p>' + cidade + ' - ' + estado + '</p>';
+			output += '<p><a href="#" id="voltar">Voltar</a></p>';
 		};
 		$("#dados_anunciante").html(output);
 		}
@@ -70,14 +107,23 @@ $(document).on("click","#voltar",function(){
 	prevSelection = newSelection;
 });
 
+$(document).on("click","#voltar2",function(){
+	var newSelection = "tab3";
+	id_anuncio = 0;
+	$("#dados_anunciante").html("");
+	$("."+prevSelection).addClass("ui-screen-hidden");
+	$("."+newSelection).removeClass("ui-screen-hidden");
+	prevSelection = newSelection;
+});
+
 //Mapa Atual
 //Funcoes para exibir o mapa da posicao atual
 function getGeolocation() {
 	// get the user's gps coordinates and display map
 	var options = {
-	maximumAge: 3000,
-	timeout: 5000,
-	enableHighAccuracy: true
+	maximumAge: 30000,
+	timeout: 9000,
+	enableHighAccuracy: false
 	};
 	navigator.geolocation.getCurrentPosition(loadMap, geoError, options);
 }
@@ -156,7 +202,7 @@ function load_mapa_anunciantes() {
 	  var point = new google.maps.LatLng(
 		  parseFloat(markers[i].getAttribute("lat")),
 		  parseFloat(markers[i].getAttribute("lng")));
-	  var html = "<b>" + name + "</b> <br/>" + address;
+	  var html = '<b>' + name + '</b> <br/>' + address + '<br/><a href="#" onclick=RetornarDadosAnuncio(' + codigo + ')>Ver</a>';
 	 
 	  //var marker = new google.maps.Marker({
 	//	map: map,
