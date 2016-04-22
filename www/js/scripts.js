@@ -22,7 +22,7 @@ function RetornarDadosAnuncio(codigo_anuncio){
 	//Retornando os dados do anuncio selecionado
 	$.ajax({
 	type: "GET",
-	url: "http://www.interiornaweb.com.br/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
+	url: "http://www.leandrotonon.com.br/projetos/bins/interior/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
 	dataType: "xml",
 	success: function(data) {
 		var output = "";	
@@ -69,7 +69,7 @@ $(document).on("click","#anunciantes ul li", function(){
 	//Retornando os dados do anuncio selecionado
 	$.ajax({
 	type: "GET",
-	url: "http://www.interiornaweb.com.br/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
+	url: "http://www.leandrotonon.com.br/projetos/bins/interior/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
 	dataType: "xml",
 	success: function(data) {
 		var output = "";	
@@ -189,7 +189,7 @@ function load_mapa_anunciantes() {
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
   var infoWindow = new google.maps.InfoWindow;
   // Change this depending on the name of your PHP file
-  downloadUrl("http://www.interiornaweb.com.br/xml_tipo1.php?cidade=PIRAJU", function(data) {
+  downloadUrl("http://www.leandrotonon.com.br/projetos/bins/interior/xml_tipo1.php?cidade=PIRAJU", function(data) {
 	var xml = data.responseXML;
 	var markers = xml.documentElement.getElementsByTagName("marker");
 	var total_resultados = markers.length;
@@ -262,7 +262,7 @@ function ListaAnunciantes(){
 	$("#loading").show();
 	$.ajax({
 	type: "GET",
-	url: "http://www.interiornaweb.com.br/xml_anuncio.php",
+	url: "http://www.leandrotonon.com.br/projetos/bins/interior/xml_anuncio.php",
 	dataType: "xml",
 	success: function(data) {
 		var output = "";
