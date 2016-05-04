@@ -288,6 +288,7 @@ function ListaAnunciantes(){
 		};
 		$('#listview').append(output).listview('refresh');
 		$("#listview").listview("refresh");
+		$(".ConteudoLista").css('max-height',$(window).height()-250);
 		$("#listview").show();
 		$("#myFilter").show();
 		$("#loading").hide();
