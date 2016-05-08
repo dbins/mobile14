@@ -1,16 +1,104 @@
 //http://www.javascriptlint.com/online_lint.php
+
+//Funcoes do Phonegap
+var isPhoneGapReady = false;
+var isConnected = false;
+var isHighSpeed = false;
+var tipo_conexao = "";
+var email_aplicativo;
+var latitude = "";
+var longitude = "";
+
+// alert dialog dismissed
+function alertDismissed() {
+	// do something
+}
+
+//$(document).ready(function(){
+document.addEventListener("deviceready", onDeviceReady, false);
+//});
+ 
+function onDeviceReady() {
+	isPhoneGapReady = true;
+	// detect for network access
+	networkDetection();
+	// attach events for online and offline detection
+	document.addEventListener("online", onOnline, false);
+	document.addEventListener("offline", onOffline, false);
+	if (isConnected){
+		$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false").done(function( script, textStatus ) {
+			//alert(textStatus);	
+			//console.log( textStatus );
+		}).fail(function( jqxhr, settings, exception ) {
+			//$( "div.log" ).text( "Triggered ajaxError handler." );
+		});
+	}
+}
+
+function networkDetection() {
+	if (isPhoneGapReady) {
+		
+		var states = {};
+		states[navigator.connection.UNKNOWN]  = 'Unknown connection';
+		states[navigator.connection.ETHERNET] = 'Ethernet connection';
+		states[navigator.connection.WIFI]     = 'WiFi connection';
+		states[navigator.connection.CELL_2G]  = 'Cell 2G connection';
+		states[navigator.connection.CELL_3G]  = 'Cell 3G connection';
+		states[navigator.connection.CELL_4G]  = 'Cell 4G connection';
+		states[navigator.connection.NONE]     = 'No network connection';
+		var tipo_conexao = states[navigator.connection.type];
+		if (tipo_conexao != 'No network connection') {
+			isConnected = true;
+		}
+	}	
+}
+
+function onOnline() {
+	isConnected = true;
+}
+function onOffline() {
+	isConnected = false;
+}
+
+function ValidarNavegacao(){
+	
+	if (isPhoneGapReady){
+		if (isConnected) {
+			//Continuar
+		} else {
+			navigator.notification.alert('Não existe conexão com a Internet',alertDismissed, 'Interior na Web', 'OK');
+			$(".tab4").addClass("ui-screen-hidden");
+			$(".tab3").addClass("ui-screen-hidden");
+			$(".tab2").addClass("ui-screen-hidden");
+			$(".tab1").removeClass("ui-screen-hidden");
+			prevSelection = "tab1";
+		}
+	} else {
+		navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Interior na Web', 'OK');
+		$(".tab4").addClass("ui-screen-hidden");
+		$(".tab3").addClass("ui-screen-hidden");
+		$(".tab2").addClass("ui-screen-hidden");
+		$(".tab1").removeClass("ui-screen-hidden");
+		prevSelection = "tab1";
+	}
+}
+
+
 function PaginaAtual(pagina){
 	//Anunciantes
 	if (pagina =="tab2"){
+		ValidarNavegacao();
 		ListaAnunciantes();
 	}
 	
 	//Mapa Anunciantes
 	if (pagina =="tab3"){
+		ValidarNavegacao();
 		load_mapa_anunciantes();
 	}
 	//Mapa Dispositivo
 	if (pagina =="tab4"){
+		ValidarNavegacao();
 		getGeolocation();
 	}
 }
@@ -22,7 +110,7 @@ function RetornarDadosAnuncio(codigo_anuncio){
 	//Retornando os dados do anuncio selecionado
 	$.ajax({
 	type: "GET",
-	url: "http://www.leandrotonon.com.br/projetos/bins/interior/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
+	url: "http://www.dbins.com.br/ferramentas/interior/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
 	dataType: "xml",
 	success: function(data) {
 		var output = "";	
@@ -69,7 +157,7 @@ $(document).on("click","#anunciantes ul li", function(){
 	//Retornando os dados do anuncio selecionado
 	$.ajax({
 	type: "GET",
-	url: "http://www.leandrotonon.com.br/projetos/bins/interior/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
+	url: "http://www.dbins.com.br/ferramentas/interior/xml_detalhe_anuncio.php?codigo=" + id_anuncio,
 	dataType: "xml",
 	success: function(data) {
 		var output = "";	
@@ -189,7 +277,7 @@ function load_mapa_anunciantes() {
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
   var infoWindow = new google.maps.InfoWindow;
   // Change this depending on the name of your PHP file
-  downloadUrl("http://www.leandrotonon.com.br/projetos/bins/interior/xml_tipo1.php?cidade=PIRAJU", function(data) {
+  downloadUrl("http://www.dbins.com.br/ferramentas/interior/xml_tipo1.php?cidade=PIRAJU", function(data) {
 	var xml = data.responseXML;
 	var markers = xml.documentElement.getElementsByTagName("marker");
 	var total_resultados = markers.length;
@@ -262,7 +350,7 @@ function ListaAnunciantes(){
 	$("#loading").show();
 	$.ajax({
 	type: "GET",
-	url: "http://www.leandrotonon.com.br/projetos/bins/interior/xml_anuncio.php",
+	url: "http://www.dbins.com.br/ferramentas/interior/xml_anuncio.php",
 	dataType: "xml",
 	success: function(data) {
 		var output = "";
