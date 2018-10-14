@@ -26,7 +26,7 @@ function onDeviceReady() {
 	document.addEventListener("online", onOnline, false);
 	document.addEventListener("offline", onOffline, false);
 	if (isConnected){
-		$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false").done(function( script, textStatus ) {
+		$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=AIzaSyB-dudx6w0oDbDuAcrcMUEmD-cVc5fHVmE").done(function( script, textStatus ) {
 			//alert(textStatus);	
 			//console.log( textStatus );
 		}).fail(function( jqxhr, settings, exception ) {
