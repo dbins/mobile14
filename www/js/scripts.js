@@ -175,7 +175,6 @@ $(document).on("click","#anunciantes ul li", function(){
 			output += '<p>' + endereco + '</p>';
 			output += '<p>' + ddd + ' - ' + telefone + '</p>';
 			output += '<p>' + cidade + ' - ' + estado + '</p>';
-			output += '<p><a href="#" id="voltar">Voltar</a></p>';
 		};
 		$("#dados_anunciante").html(output);
 		}
